@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<entorno>
+
+<desktop_file>
+	<name>Test</name>
+	<description>This is a test file</description>
+	<icon_ff>./terminal.png</icon_ff>
+	<show>True</show>
+</desktop_file>
+
+</entorno>
+
