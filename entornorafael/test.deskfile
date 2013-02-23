@@ -4,6 +4,7 @@
 <desktop_file>
 	<name>Test</name>
 	<description>This is a test file</description>
+	<exec>gnome-terminal</exec>
 	<icon_ff>./terminal.png</icon_ff>
 	<show>True</show>
 </desktop_file>

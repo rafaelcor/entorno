@@ -6,7 +6,7 @@ import gtk
 import os
 from plugins import horayfecha
 from plugins import user
-#gtk.rc_parse("/usr/share/themes/Ambiance/gtk-2.0/gtkrc")
+gtk.rc_parse("/usr/share/themes/Clearlooks/gtk-2.0/gtkrc")
 
 
 
@@ -14,9 +14,12 @@ class Base:
 	def logoutf(self,widget):
 		import os
 		import sys
-		os.system("python login.py")
+		#os.system("python login.py")
+		#os.system("sudo killall Xorg")
+		
+		os.system("killall openbox")
 		sys.exit()
-
+		
 	
 	
 	
@@ -35,10 +38,10 @@ class Base:
     
 	def exitbuttondesk(self, widget, event):
 		if event.type == gtk.gdk._2BUTTON_PRESS:
-			import commands
-			f = commands.getoutput('gnome-terminal')
-			if "orden" in f:
-				commands.getoutput('cmd')
+			#import commands
+			f = os.system('gnome-terminal &')
+			#if "orden" in f:
+			#	commands.getoutput('cmd')
 	
 	
 	def nw(self,widget):
@@ -49,18 +52,19 @@ class Base:
 		self.button.show()
 		
 	def opent(self,widget):
-		import commands
-		f = commands.getoutput('gnome-terminal')
-		if "orden" in f:
-			commands.getoutput('cmd')
+		#import commands
+		f = os.system('gnome-terminal &')
+		#if "orden" in f:
+		#	commands.getoutput('cmd')
 
 	def __init__(self):
 		self.win = gtk.Window(gtk.WINDOW_POPUP)
 		#self.win.set_gravity(False)
 		self.win2 = gtk.Window(gtk.WINDOW_POPUP)
 		self.win3 = gtk.Window()
-		self.win3.set_size_request(gtk.gdk.screen_width(), gtk.gdk.screen_height())
-		self.win3.set_decorated(False)
+		#os.system("openbox")
+		#self.win3.set_size_request(gtk.gdk.screen_width(), gtk.gdk.screen_height())
+		self.win3.set_decorated(0)
 		self.win3.fullscreen()
 		self.win3.add_events(gtk.gdk.BUTTON_PRESS_MASK)
 		self.menurc = gtk.Menu()#right click menu
@@ -83,29 +87,46 @@ class Base:
 		self.image = gtk.image_new_from_pixbuf(self.pixbuf)
 		#self.box = gtk.VBox()
 		self.fixed = gtk.Fixed()
-		self.box = gtk.VBox()
-		self.buttoninf = gtk.ToggleButton()
-		self.buttoninf.set_size_request(95,86)
+		#self.box = gtk.VBox()
+		#self.buttoninf = gtk.ToggleButton()
+		#self.buttoninf.set_size_request(95,86)
 		self.win3.add(self.fixed)
-		self.imageforb = gtk.Image()
-		self.imageforb.set_from_file("/home/rafael/Escritorio/entornorafael/terminal.png")
-		self.buttoninf.add(self.box)
+		#self.imageforb = gtk.Image()
+		#self.imageforb.set_from_file("/home/rafael/Escritorio/entornorafael/terminal.png")
+		#self.buttoninf.add(self.box)
 		#self.buttoninf.connect('clicked', self.opent)
 		#self.buttoninf.add(self.imageforb)
-		self.imageforb.show()
+		#self.imageforb.show()
+		self.table = gtk.Table(7, 15, True)
+		x = 0
+		y = 0
+		for algo in os.listdir("/home/rafael/Escritorio/"):
+			self.algo = algo
+			self.buttont = gtk.ToggleButton(label=algo)
+			self.buttont.connect("button_press_event",self.abrir,self.algo)
+			self.buttont.set_size_request(95,86)
+			self.table.attach(self.buttont, x, x+1, y, y+1)
+			x += 1
+			if x >= 15:
+				x = 0
+				y += 1
+            
+			self.buttont.show()
 		
 		self.fixed.put(self.image, 0, 25)
-		self.fixed.put(self.buttoninf, 120, 400)
+		self.fixed.put(self.table, 0, 25)
+		self.table.show()
+		##self.fixed.put(self.buttoninf, 120, 400)
 		
 		#self.box.pack_start(self.buttoninf, True,True,-1)
-		self.buttoninf.show()
-		self.label = gtk.Label("Terminal")
-		self.box.pack_start(self.imageforb,True,True,1)
-		self.box.pack_start(self.label,True,True,1)
-		self.buttoninf.connect("button_press_event", self.exitbuttondesk)
-		self.box.show()
+		##self.buttoninf.show()
+		#self.label = gtk.Label("Terminal")
+		#self.box.pack_start(self.imageforb,True,True,1)
+		#self.box.pack_start(self.label,True,True,1)
+		#self.buttoninf.connect("button_press_event", self.exitbuttondesk)
+		#self.box.show()
 		self.fixed.show()
-		self.label.show()
+		#self.label.show()
 		
 		
 		#self.tg = gtk.ToggleButton(label="hello")
@@ -164,7 +185,7 @@ class Base:
 		self.powericon = gtk.image_new_from_icon_name("system-shutdown", gtk.ICON_SIZE_LARGE_TOOLBAR)
 		self.poweritem.add(self.powericon)
 		#self.poweritem.selected-shadow-type(gtk.SHADOW_OUT)
-		self.poweritem.connect("button_press_event",gtk.main_quit)
+		#self.poweritem.connect("button_press_event",self.logoutf)
 		self.bar2.append(self.tad2)
 		self.bar2.append(self.poweritem)
 		user.Base(self.bar2)
@@ -200,6 +221,7 @@ class Base:
 		self.poweritem.show()
 		self.powericon.show()
 		self.image.show()
+		#os.system("openbox --replace")
 		#self.box.show()
 		#self.tg.show()
 
@@ -226,12 +248,12 @@ class Base:
 		self.wind.hide()
 
 	def refreshdesktop(self):
-		self.fixed.put(self.buttoninf, 120, 400)
-		self.imageforb.realize()
-		self.buttoninf.realize()
-		self.box.realize()
+		self.fixed.put(self.table, 0, 25)
+		#self.imageforb.realize()
+		#self.buttoninf.realize()
+		#self.box.realize()
 		self.fixed.realize()
-		self.label.realize()
+		#self.label.realize()
 
 
 	#self.pixbuf = gtk.gdk.pixbuf_new_from_file('fondo.jpg')
@@ -265,7 +287,32 @@ class Base:
 		self.dialog.destroy()
 		
 		
-		
+	def abrir(self, widget, event, archivo):
+		if event.type == gtk.gdk._2BUTTON_PRESS:
+			try:
+				if os.path.isdir(archivo):
+					os.system("nautilus %s" % archivo )
+					print archivo
+					
+				elif os.path.islink(archivo):
+					print archivo
+					print 'enlace'
+				elif os.path.isfile(archivo):
+					print "Es un archivo"
+					print archivo
+					self.archivosp = archivo
+					self.archivospp = archivo.split(".")
+					print self.archivospp[-1]
+					if self.archivospp[-1] == "deskfile":
+						print "en construccion"
+					elif len(self.archivospp) <= 1:
+						import commands
+						self.mimef = commands.getoutput("file " + "%s"%self.archivosp).split(": ")[1].split(",")[0]
+						print self.mimef
+						if self.mimef == "POSIX shell script text executable" or "very short file (no magic)" or "ASCII English text":
+							os.system("nano %s"%self.archivosp)
+			except:
+				print "una excepcion"
 		
 		
 	
