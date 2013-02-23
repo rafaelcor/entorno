@@ -103,7 +103,7 @@ class Base:
 		for algo in os.listdir("/home/rafael/Escritorio/"):
 			self.algo = algo
 			self.buttont = gtk.ToggleButton(label=algo)
-			self.buttont.connect("button_press_event",self.abrir,self.algo)
+			self.buttont.connect("button_press_event",self.abrir,"/home/rafael/Escritorio/"+self.algo)
 			self.buttont.set_size_request(95,86)
 			self.table.attach(self.buttont, x, x+1, y, y+1)
 			x += 1
